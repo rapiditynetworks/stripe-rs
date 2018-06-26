@@ -1,34 +1,35 @@
 [package]
-name = "stripe-rust" # b.c. stripe and stripe-rs were already taken
-version = "0.4.7"
-description = "API bindings for the Stripe v1 HTTP API"
 authors = ["Kevin Stenerson <kevin@rapiditynetworks.com>"]
+categories = ["api-bindings"]
+description = "API bindings for the Stripe v1 HTTP API"
+documentation = "https://docs.rs/stripe-rust"
+keywords = [
+    "stripe",
+    "v1",
+    "api",
+]
 license = "MIT/Apache-2.0"
+name = "stripe-rust"
 readme = "README.md"
 repository = "https://github.com/rapiditynetworks/stripe-rs"
-documentation = "https://docs.rs/stripe-rust"
-keywords = ["stripe", "v1", "api"]
-categories = ["api-bindings"]
+version = "0.5.0"
 
-[badges]
-travis-ci = {repository = "rapiditynetworks/stripe-rs"}
-
-[features]
-default = ["with-rustls"]
-with-rustls = ["hyper-rustls"]
-with-openssl = ["hyper-openssl"]
-
-[lib]
-name = "stripe"
+[badges.travis-ci]
+repository = "rapiditynetworks/stripe-rs"
 
 [dependencies]
-chrono = { version = "0.4", features = ["serde"] }
-hmac = "^0.1"
-hyper = "^0.10"
-hyper-rustls = { version = "^0.6", optional = true }
-hyper-openssl = { version = "^0.2", optional = true }
+hmac = "^0.6"
+hyper = "^0.12"
+hyper-tls = "0.2.1"
 serde = "^1.0"
 serde_derive = "^1.0"
 serde_json = "^1.0"
-serde_qs = "^0.2"
-sha2 = "^0.5"
+serde_qs = "^0.4"
+sha2 = "^0.7"
+
+[dependencies.chrono]
+features = ["serde"]
+version = "0.4"
+
+[lib]
+name = "stripe"
