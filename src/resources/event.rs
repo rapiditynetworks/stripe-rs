@@ -1,7 +1,7 @@
 use chrono::{Utc};
 use error::{WebhookError};
 use resources::*;
-use hmac::{Hmac, Mac, MacResult};
+use hmac::{Hmac, Mac};
 use serde_json as json;
 use sha2::Sha256;
 use std::str;
@@ -215,19 +215,19 @@ impl Webhook {
         let ref mut signature: Vec<String> = headers[1].split("=").map(|s| s.to_string()).collect();
 
         // Compute HMAC with the SHA256 hash function, using endpoing secret as key and signed_payload string as the message
-        let mut mac = Hmac::<Sha256>::new(secret.as_bytes());
+        let mut mac = Hmac::<Sha256>::new_varkey(secret.as_bytes()).unwrap();
         mac.input(signed_payload.as_bytes());
 
         let result = mac.result();
 
-        let bytes_signature = MacResult::from_slice(signature[1].as_bytes());
+        let bytes_signature = signature[1].as_bytes();
 
         // Get current timestamp to compare to signature timestamp
         let current = Utc::now().timestamp();
         let num_timestamp = timestamp[1].parse::<i64>()
             .map_err(|err| WebhookError::BadHeader(err))?;
 
-        if bytes_signature != result {
+        if !result.is_equal(bytes_signature) {
             return Err(WebhookError::BadSignature);
         }
 
